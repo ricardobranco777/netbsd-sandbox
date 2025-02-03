@@ -236,7 +236,7 @@ secmodel_sandbox_cred_cb(kauth_cred_t cred, kauth_action_t action,
         SANDBOX_LOG_INFO("KAUTH_CRED_INIT\n");
         break;
     default:
-        SANDBOX_LOG_WARN("unknown action %d for scope %s\n", action, KAUTH_SCOPE_CRED);
+        SANDBOX_LOG_WARN("unknown action %lu for scope %s\n", action, KAUTH_SCOPE_CRED);
         goto done;
     }
 
@@ -396,7 +396,7 @@ secmodel_sandbox_system_cb(kauth_cred_t cred, kauth_action_t action,
 {
     int result = KAUTH_RESULT_DEFER;
     struct sandbox_list *sandbox_list = NULL;
-    enum kauth_system_req req = (enum kauth_system_req)arg0;
+    enum kauth_system_req req = (enum kauth_system_req)(uintptr_t)arg0;
     
     sandbox_list = kauth_cred_getdata(cred, secmodel_sandbox_key);
     if (sandbox_list != NULL) {
@@ -432,7 +432,7 @@ secmodel_sandbox_network_cb(kauth_cred_t cred, kauth_action_t action,
 {
     int result = KAUTH_RESULT_DEFER;
     struct sandbox_list *sandbox_list = NULL;
-    enum kauth_network_req req = (enum kauth_network_req)arg0;
+    enum kauth_network_req req = (enum kauth_network_req)(uintptr_t)arg0;
 
     sandbox_list = kauth_cred_getdata(cred, secmodel_sandbox_key);
     if (sandbox_list != NULL) {

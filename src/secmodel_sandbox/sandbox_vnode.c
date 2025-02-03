@@ -157,7 +157,7 @@ sandbox_vnode_scandir(struct vnode *dvp, struct vnode *vp, kauth_cred_t cred,
             //SANDBOX_LOG_DEBUG("len=%d, reclen=%d\n", len, reclen);
 
             /* check for malformed directory */
-            if (reclen < _DIRENT_MINSIZE(dp)) {
+            if (reclen < (int)_DIRENT_MINSIZE(dp)) {
                 SANDBOX_LOG_ERROR("reclen (%d) < _DIRENT_MINSIZE(dp)\n", reclen);
                 error = EINVAL;
                 goto fail;
@@ -195,7 +195,6 @@ succeed:
         cn.cn_cred = cred; \
         cn.cn_nameptr = ".."; \
         cn.cn_namelen = 2; \
-        cn.cn_consume = 0; \
     } while (0)
 
 static int
@@ -334,7 +333,7 @@ sandbox_vnode_to_path(struct vnode *vp, char *outpath, size_t outpathlen)
 
     /* bp will point to vp's filename (as recorded in the dvp directory record)
      */
-    error = cache_revlookup(vp, &dvp, &bp, basename);
+    error = cache_revlookup(vp, &dvp, &bp, basename, false, 0);
     if (error != 0) {
         SANDBOX_LOG_ERROR("cache_revlookup failed (%d)\n", error);
         SANDBOX_VNODE_PRINT(vp, "vp");
