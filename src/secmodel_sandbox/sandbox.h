@@ -41,7 +41,7 @@
 
 #include "sandbox_ruleset.h"
 
-int sandbox_nlists;
+extern int sandbox_nlists;
 
 struct sandbox_list {
     SLIST_HEAD(, sandbox) head;

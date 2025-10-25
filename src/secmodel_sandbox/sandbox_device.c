@@ -145,13 +145,9 @@ sandbox_device_init(void)
 void
 sandbox_device_fini(void)
 {
-    int error = 0;
-
     SANDBOX_LOG_TRACE_ENTER;
 
-    error = devsw_detach(NULL, &sandbox_cdevsw);
-    if (error != 0)
-        SANDBOX_LOG_ERROR("devsw_detach() failed: error=%d\n", error);
+    devsw_detach(NULL, &sandbox_cdevsw);
 
     SANDBOX_LOG_TRACE_EXIT;
 }

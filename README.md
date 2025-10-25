@@ -1,3 +1,5 @@
+NOTE: This code has been modified to compile on NetBSD 10.1 & verified on NetBSD 11 Beta.
+
 Overview
 ========
 The secmodel_sandbox security module for NetBSD 7.x.  The module allows an

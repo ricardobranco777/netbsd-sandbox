@@ -854,7 +854,7 @@ sandbox_list_evalsystem(struct sandbox_list *sandbox_list, kauth_cred_t cred,
         result = SANDBOX_LIST_EVAL_NOARGS(sandbox_list, cred, &rule);
         break;
     default:
-        SANDBOX_LOG_WARN("unknown action (%u) for rule: %s\n", action,
+        SANDBOX_LOG_WARN("unknown action (%lu) for rule: %s\n", action,
                 SANDBOX_RULE_SCOPE(&rule));
         break;
     }
@@ -885,12 +885,12 @@ sandbox_list_evalprocess(struct sandbox_list *sandbox_list, kauth_cred_t cred,
         break;
     case KAUTH_PROCESS_CANSEE:
         /* arg1=req, arg2=NULL, arg3=NULL */
-        req = (enum kauth_process_req)arg1;
+        req = (enum kauth_process_req)(uintptr_t)arg1;
         SANDBOX_RULE_SUBACTION(&rule) = SANDBOX_ARRAY_GET(sandbox_process_req_strmap, req);
         result = SANDBOX_LIST_EVAL_PROCESS(sandbox_list, cred, &rule, p);
         break;
     case KAUTH_PROCESS_CORENAME:
-        req = (enum kauth_process_req)arg1;
+        req = (enum kauth_process_req)(uintptr_t)arg1;
         switch (req) {
         case KAUTH_REQ_PROCESS_CORENAME_GET:
             /* arg1=req, arg2=NULL, arg3=NULL */
@@ -932,7 +932,7 @@ sandbox_list_evalprocess(struct sandbox_list *sandbox_list, kauth_cred_t cred,
         result = SANDBOX_LIST_EVAL_PROCESS(sandbox_list, cred, &rule, p);
         break;
     default:
-        SANDBOX_LOG_WARN("unknown action (%u) for rule: %s\n", action,
+        SANDBOX_LOG_WARN("unknown action (%lu) for rule: %s\n", action,
                     SANDBOX_RULE_SCOPE(&rule));
         break;
     }
@@ -1044,7 +1044,7 @@ sandbox_list_evalnetwork(struct sandbox_list *sandbox_list, kauth_cred_t cred,
         }
         break;
     default:
-        SANDBOX_LOG_WARN("unknown action (%u) for rule: %s\n", action,
+        SANDBOX_LOG_WARN("unknown action (%lu) for rule: %s\n", action,
                 SANDBOX_RULE_SCOPE(&rule));
         break;
     }
@@ -1082,7 +1082,7 @@ sandbox_list_evalmachdep(struct sandbox_list *sandbox_list, kauth_cred_t cred,
                 SANDBOX_CAST_PVOID_TO_LUA_INTEGER(arg0));
         break;
     default:
-        SANDBOX_LOG_WARN("unknown action (%u) for rule: %s\n", action,
+        SANDBOX_LOG_WARN("unknown action (%lu) for rule: %s\n", action,
                 SANDBOX_RULE_SCOPE(&rule));
         break;
     }
@@ -1109,12 +1109,12 @@ sandbox_list_evaldevice(struct sandbox_list *sandbox_list, kauth_cred_t cred,
         break;
     case  KAUTH_DEVICE_RAWIO_SPEC:
         /* arg0=req arg1=struct vnode * */
-        SANDBOX_RULE_SUBACTION(&rule) = SANDBOX_ARRAY_GET(sandbox_device_req_strmap, (enum kauth_device_req)arg0);
+        SANDBOX_RULE_SUBACTION(&rule) = SANDBOX_ARRAY_GET(sandbox_device_req_strmap, (enum kauth_device_req)(uintptr_t)arg0);
         result = SANDBOX_LIST_EVAL_NOARGS(sandbox_list, cred, &rule);
         break;
     case KAUTH_DEVICE_RAWIO_PASSTHRU:
         /* arg0=req, arg1=dev_t dev, arg2=void *data, arg3=NULL */
-        SANDBOX_RULE_SUBACTION(&rule) = SANDBOX_ARRAY_GET(sandbox_device_req_strmap, (enum kauth_device_req)arg0);
+        SANDBOX_RULE_SUBACTION(&rule) = SANDBOX_ARRAY_GET(sandbox_device_req_strmap, (enum kauth_device_req)(uintptr_t)arg0);
         /* TODO: have fmt include dev; data depends on dev, so that will take
          * more work to include
          */
@@ -1138,7 +1138,7 @@ sandbox_list_evaldevice(struct sandbox_list *sandbox_list, kauth_cred_t cred,
     case KAUTH_DEVICE_BLUETOOTH_BCSP:
     case KAUTH_DEVICE_BLUETOOTH_BTUART:
         /* arg0=req, arg1=NULL, arg2=NULL, arg3=NULL */
-        SANDBOX_RULE_SUBACTION(&rule) = SANDBOX_ARRAY_GET(sandbox_device_req_strmap, (enum kauth_device_req)arg0);
+        SANDBOX_RULE_SUBACTION(&rule) = SANDBOX_ARRAY_GET(sandbox_device_req_strmap, (enum kauth_device_req)(uintptr_t)arg0);
         result = SANDBOX_LIST_EVAL_NOARGS(sandbox_list, cred, &rule);
         break;
     case KAUTH_DEVICE_BLUETOOTH_SEND:
@@ -1152,7 +1152,7 @@ sandbox_list_evaldevice(struct sandbox_list *sandbox_list, kauth_cred_t cred,
                 SANDBOX_CAST_PVOID_TO_LUA_INTEGER(arg1));
         break;
     default:
-        SANDBOX_LOG_WARN("unknown action (%u) for rule: %s\n", action,
+        SANDBOX_LOG_WARN("unknown action (%lu) for rule: %s\n", action,
                 SANDBOX_RULE_SCOPE(&rule));
         break;
     }
